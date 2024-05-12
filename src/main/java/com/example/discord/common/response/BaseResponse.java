@@ -3,6 +3,7 @@ package com.example.discord.common.response;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -18,17 +19,24 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 @JsonPropertyOrder({"isSuccess", "code", "message", "result"})
-public class ApiResponse<T> {
+@Schema(description = "base response format")
+public class BaseResponse<T> {
     @JsonProperty
+    @Schema(description = "요청처리 성공여부")
     private final Boolean isSuccess;
+
+    @Schema(description = "상태코드")
     private final int code;
+
+    @Schema(description = "상태메시지")
     private final String message;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
+    @Schema(description = "요청 처리 결과값")
     private T result;
 
     // 요청에 성공한 경우
-    public ApiResponse(T result) {
+    public BaseResponse(T result) {
         this.isSuccess = ApiResponseStatus.SUCCESS.isSuccess();
         this.message = ApiResponseStatus.SUCCESS.getMessage();
         this.code = ApiResponseStatus.SUCCESS.getCode();
@@ -36,7 +44,7 @@ public class ApiResponse<T> {
     }
 
     // 요청에 실패한 경우
-    public ApiResponse(ApiResponseStatus status) {
+    public BaseResponse(ApiResponseStatus status) {
         this.isSuccess = status.isSuccess();
         this.message = status.getMessage();
         this.code = status.getCode();
