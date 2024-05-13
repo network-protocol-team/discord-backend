@@ -24,6 +24,7 @@ public enum ApiResponseStatus {
     // 커스텀 에러 예시
     NOT_BYE_TOKKI_ERROR(false, HttpStatus.BAD_REQUEST.value(), "토끼는 떠나보낼 수 없습니다."),
 
+    DUPLICATE_NICKNAME_ERROR(false, HttpStatus.NOT_FOUND.value(), "중복된 유저이름입니다."),
 
     /**
      * 500 번대

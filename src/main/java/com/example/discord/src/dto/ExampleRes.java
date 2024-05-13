@@ -1,4 +1,4 @@
-package com.example.discord.src.service.dto;
+package com.example.discord.src.dto;
 
 import lombok.Builder;
 import lombok.Getter;

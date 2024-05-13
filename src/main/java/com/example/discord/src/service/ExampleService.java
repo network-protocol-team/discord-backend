@@ -5,7 +5,7 @@ import com.example.discord.common.response.ApiResponseStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import com.example.discord.src.service.dto.ExampleRes;
+import com.example.discord.src.dto.ExampleRes;
 
 @Service
 @RequiredArgsConstructor
