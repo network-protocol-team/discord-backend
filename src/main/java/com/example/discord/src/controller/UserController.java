@@ -32,7 +32,7 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "중복된 유저이름입니다.", content = @Content(schema = @Schema(implementation = BaseResponse.class), mediaType = "application/json"))
     })
     @PostMapping()
-    public BaseResponse<PostUserRes> signUp(@RequestBody PostUserReq postUserReq) {
+    public BaseResponse signUp(@RequestBody PostUserReq postUserReq) {
 
         Optional<PostUserRes> postUserRes = userService.signUp(postUserReq);
 
