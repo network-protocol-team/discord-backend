@@ -7,6 +7,7 @@ import com.example.discord.src.entity.User;
 import com.example.discord.src.repository.UserRepository;
 import com.example.discord.src.service.UserService;
 import com.example.discord.src.dto.PostUserRes;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,15 +50,18 @@ public class UserServiceIntegrationTest {
     @Test
     public void signUpFromController() throws Exception {
         PostUserReq postUserReq = new PostUserReq();
-        postUserReq.setNickName("user1");
+        postUserReq.setNickName("user2");
 
         BaseResponse responseBody = userController.signUp(postUserReq);
 
         log.info("suceess: {}", responseBody.getIsSuccess());
         log.info("code: {}", responseBody.getCode());
         log.info("message: {}", responseBody.getMessage());
-        if(responseBody.getIsSuccess())
-            log.info("result: {}", responseBody.getResult());
-
+        if(responseBody.getIsSuccess()) {
+            PostUserRes postUserRes = (PostUserRes) responseBody.getResult();
+            log.info("result: ");
+            log.info("nickName: {}", postUserRes.getUserId());
+            log.info("cookie: {}", postUserRes.getCookie().getValue());
+        }
     }
 }
