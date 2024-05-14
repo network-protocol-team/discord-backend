@@ -2,7 +2,6 @@ package com.example.discord.src.service;
 
 import com.example.discord.common.exception.BaseException;
 import com.example.discord.common.response.ApiResponseStatus;
-import com.example.discord.common.response.BaseResponse;
 import com.example.discord.src.dto.PostUserReq;
 import com.example.discord.src.entity.User;
 import com.example.discord.src.repository.UserRepository;
@@ -10,8 +9,6 @@ import com.example.discord.src.dto.PostUserRes;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -26,11 +23,11 @@ public class UserService {
     }
 
     /* 유저 가입 */
-    public Optional<PostUserRes> signUp(PostUserReq postUserReq){
+    public PostUserRes signUp(PostUserReq postUserReq){
 
         if(validateDuplicateNickName(postUserReq.getNickName())) {
             // nickname 중복
-            return Optional.empty();
+            throw new BaseException(ApiResponseStatus.DUPLICATE_NICKNAME_ERROR);
         }
 
         User user = new User();
@@ -39,9 +36,9 @@ public class UserService {
 
         PostUserRes postUserRes = new PostUserRes();
         postUserRes.setUserId(user.getUserId());
+        postUserRes.setNickName(user.getNickName());
         log.info("user " + user.getNickName() + " created");
 
-        return Optional.of(postUserRes);
+        return postUserRes;
     }
-
 }

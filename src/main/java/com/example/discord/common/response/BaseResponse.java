@@ -36,10 +36,10 @@ public class BaseResponse<T> {
     private T result;
 
     // 요청에 성공한 경우
-    public BaseResponse(ApiResponseStatus status, T result) {
-        this.isSuccess = status.isSuccess();
-        this.message = status.getMessage();
-        this.code = status.getCode();
+    public BaseResponse(T result) {
+        this.isSuccess = ApiResponseStatus.SUCCESS.isSuccess();
+        this.message = ApiResponseStatus.SUCCESS.getMessage();
+        this.code = ApiResponseStatus.SUCCESS.getCode();
         this.result = result;
     }
 

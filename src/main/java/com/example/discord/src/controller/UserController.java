@@ -1,5 +1,6 @@
 package com.example.discord.src.controller;
 
+import com.example.discord.common.exception.BaseException;
 import com.example.discord.common.response.ApiResponseStatus;
 import com.example.discord.common.response.BaseResponse;
 import com.example.discord.src.dto.PostUserReq;
@@ -32,20 +33,25 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "중복된 유저이름입니다.", content = @Content(schema = @Schema(implementation = BaseResponse.class), mediaType = "application/json"))
     })
     @PostMapping()
-    public BaseResponse signUp(@RequestBody PostUserReq postUserReq) {
+    public BaseResponse<PostUserRes> signUp(@RequestBody PostUserReq postUserReq) {
+        try {
+            PostUserRes postUserRes = userService.signUp(postUserReq);
 
-        Optional<PostUserRes> postUserRes = userService.signUp(postUserReq);
+            /* TODO: 쿠키 생성 */
+            Cookie cookie = new Cookie("userId", String.valueOf(postUserRes.getUserId()));
+            cookie.setHttpOnly(true);
+            cookie.setPath("/");
+            postUserRes.setCookie(cookie);
 
-        if(postUserRes.isEmpty()) {
-            return new BaseResponse<>(ApiResponseStatus.DUPLICATE_NICKNAME_ERROR);
+            return new BaseResponse<>(postUserRes);
+
+        }catch(BaseException baseException) {
+            if(baseException.getStatus().equals(ApiResponseStatus.DUPLICATE_NICKNAME_ERROR))
+                return new BaseResponse<>(ApiResponseStatus.DUPLICATE_NICKNAME_ERROR);
+            else {
+                log.debug(baseException.getMessage());
+                throw baseException;
+            }
         }
-
-        /* TODO: 쿠키 생성 */
-        Cookie cookie = new Cookie("userId", String.valueOf(postUserRes.get().getUserId()));
-        cookie.setHttpOnly(true);
-        cookie.setPath("/");
-        postUserRes.get().setCookie(cookie);
-
-        return new BaseResponse<>(ApiResponseStatus.SUCCESS, postUserRes.get());
     }
 }

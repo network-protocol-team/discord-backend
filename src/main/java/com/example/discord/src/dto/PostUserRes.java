@@ -12,8 +12,11 @@ import lombok.Setter;
 @NoArgsConstructor
 @Schema(description="유저 등록 response DTO")
 public class PostUserRes {
-    @Schema(description = "유저 ID")
+    @Schema(description = "유저 id")
     private Long userId;
+
+    @Schema(description = "유저 닉네임")
+    private String nickName;
 
     @Schema(description = "쿠키")
     private Cookie cookie;
