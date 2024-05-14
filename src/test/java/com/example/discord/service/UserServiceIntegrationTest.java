@@ -1,5 +1,6 @@
 package com.example.discord.service;
 
+import com.example.discord.common.response.BaseResponse;
 import com.example.discord.src.controller.UserController;
 import com.example.discord.src.dto.PostUserReq;
 import com.example.discord.src.entity.User;
@@ -20,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @Slf4j
 @SpringBootTest
 public class UserServiceIntegrationTest {
+    @Autowired UserController userController;
     @Autowired UserService userService;
     @Autowired UserRepository userRepository;
 
@@ -33,7 +35,7 @@ public class UserServiceIntegrationTest {
 
         if(postUserRes.isPresent()) {
             log.info("userId: {}", postUserRes.get().getUserId());
-            log.info("cookie: {}", postUserRes.get().getCookie());
+            //log.info("cookie: {}", postUserRes.get().getCookie());
 
             User user = userRepository.findByNickName(nickName).get();
             assertEquals(user.getNickName(), nickName);
@@ -42,5 +44,20 @@ public class UserServiceIntegrationTest {
             Optional<User> user = userRepository.findByNickName(nickName);
             assertThat(user.isPresent());
         }
+    }
+
+    @Test
+    public void signUpFromController() throws Exception {
+        PostUserReq postUserReq = new PostUserReq();
+        postUserReq.setNickName("user1");
+
+        BaseResponse responseBody = userController.signUp(postUserReq);
+
+        log.info("suceess: {}", responseBody.getIsSuccess());
+        log.info("code: {}", responseBody.getCode());
+        log.info("message: {}", responseBody.getMessage());
+        if(responseBody.getIsSuccess())
+            log.info("result: {}", responseBody.getResult());
+
     }
 }
