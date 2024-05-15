@@ -16,3 +16,14 @@ spring:
     redis:
       host: localhost
       port: 6379
+logging:
+  file:
+    path: ./logs
+    max-size: 10MB
+springdoc:
+  swagger-ui:
+    path: /api-docs
+    operationSorter: method
+    tagsSorter: alpha
+    syntaxHighlight:
+      theme: arta
