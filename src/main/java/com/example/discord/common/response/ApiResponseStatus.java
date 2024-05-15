@@ -26,6 +26,8 @@ public enum ApiResponseStatus {
 
     DUPLICATE_NICKNAME_ERROR(false, HttpStatus.NOT_FOUND.value(), "중복된 유저이름입니다."),
 
+    DUPLICATE_CHANNELNAME_ERROR(false, HttpStatus.NOT_FOUND.value(), "중복된 채널명입니다."),
+
     /**
      * 500 번대
      * 서버에러
