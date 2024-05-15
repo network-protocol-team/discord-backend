@@ -30,13 +30,13 @@ public class UserService {
             throw new BaseException(ApiResponseStatus.DUPLICATE_NICKNAME_ERROR);
         }
 
-        User user = new User();
-        user.setNickName(postUserReq.getNickName());
+        User user = User.builder().nickName(postUserReq.getNickName()).build();
         userRepository.save(user);
 
-        PostUserRes postUserRes = new PostUserRes();
-        postUserRes.setUserId(user.getUserId());
-        postUserRes.setNickName(user.getNickName());
+        PostUserRes postUserRes = PostUserRes.builder()
+                .userId(user.getUserId())
+                .nickName(user.getNickName())
+                .build();
         log.info("user " + user.getNickName() + " created");
 
         return postUserRes;
