@@ -1,7 +1,9 @@
 package com.example.discord.service;
 
+import com.example.discord.common.response.ApiResponseStatus;
 import com.example.discord.common.response.BaseResponse;
 import com.example.discord.src.controller.ChannelController;
+import com.example.discord.src.dto.GetChannelRes;
 import com.example.discord.src.dto.PostChannelReq;
 import com.example.discord.src.dto.PostChannelRes;
 import com.example.discord.src.repository.ChannelRepository;
@@ -21,7 +23,7 @@ public class ChannelServiceIntegrationTest {
 
     @Test
     public void postChannel() {
-        PostChannelReq postChannelReq = new PostChannelReq("채널1");
+        PostChannelReq postChannelReq = new PostChannelReq("채널3");
         BaseResponse<PostChannelRes> responseBody = channelController.postChannel(postChannelReq);
 
         log.info("success: {}", responseBody.getIsSuccess());
@@ -44,4 +46,29 @@ public class ChannelServiceIntegrationTest {
         }
     }
 
+    @Test
+    public void deleteChannel() {
+        Long channelId = 1L;
+        BaseResponse<ApiResponseStatus> responseBody = channelController.deleteChannel(channelId);
+
+        log.info("success: {}", responseBody.getIsSuccess());
+        log.info("code: {}", responseBody.getCode());
+        log.info("message: {}", responseBody.getMessage());
+
+        Assertions.assertEquals(false, channelRepository.existsById(channelId));
+    }
+
+    @Test
+    public void getChannels() {
+        BaseResponse<GetChannelRes> responseBody = channelController.getChannels();
+
+        log.info("success: {}", responseBody.getIsSuccess());
+        log.info("code: {}", responseBody.getCode());
+        log.info("message: {}", responseBody.getMessage());
+
+        responseBody.getResult().getGetChannelResList()
+                .stream()
+                .map(c -> c.getChannelName())
+                .forEach(channelName -> log.info("channelName: {}", channelName));
+    }
 }
