@@ -8,7 +8,6 @@ import com.example.discord.src.entity.User;
 import com.example.discord.src.repository.UserRepository;
 import com.example.discord.src.service.UserService;
 import com.example.discord.src.dto.PostUserRes;
-import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -23,7 +22,6 @@ public class UserServiceIntegrationTest {
     @Autowired UserRepository userRepository;
 
     @Test
-    @Transactional
     public void signUp() {
         String nickName = "오소정";
         PostUserReq postUserReq = new PostUserReq(nickName);
@@ -45,7 +43,7 @@ public class UserServiceIntegrationTest {
 
     @Test
     public void postUser() {
-        PostUserReq postUserReq = new PostUserReq("user7");
+        PostUserReq postUserReq = new PostUserReq("user8");
 
         BaseResponse<PostUserRes> responseBody = userController.postUser(postUserReq);
 
