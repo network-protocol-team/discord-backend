@@ -46,12 +46,7 @@ public class UserController {
             return new BaseResponse<>(postUserRes);
 
         }catch(BaseException baseException) {
-            if(baseException.getStatus().equals(ApiResponseStatus.DUPLICATE_NICKNAME_ERROR))
-                return new BaseResponse<>(ApiResponseStatus.DUPLICATE_NICKNAME_ERROR);
-            else {
-                log.debug(baseException.getMessage());
-                throw baseException;
-            }
+            return new BaseResponse<>(baseException.getStatus());
         }
     }
 }
