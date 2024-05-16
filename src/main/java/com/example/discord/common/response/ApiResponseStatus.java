@@ -28,6 +28,7 @@ public enum ApiResponseStatus {
 
     DUPLICATE_CHANNELNAME_ERROR(false, HttpStatus.NOT_FOUND.value(), "중복된 채널명입니다."),
 
+    NO_EXIST_CHANNEL_ERROR(false, HttpStatus.BAD_REQUEST.value(), "존재하지 않는 채널입니다."),
     /**
      * 500 번대
      * 서버에러

@@ -3,6 +3,7 @@ package com.example.discord.src.controller;
 import com.example.discord.common.exception.BaseException;
 import com.example.discord.common.response.ApiResponseStatus;
 import com.example.discord.common.response.BaseResponse;
+import com.example.discord.src.dto.GetChannelRes;
 import com.example.discord.src.dto.PostChannelReq;
 import com.example.discord.src.dto.PostChannelRes;
 import com.example.discord.src.service.ChannelService;
@@ -14,10 +15,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/channels")
@@ -40,12 +38,30 @@ public class ChannelController {
             return new BaseResponse<>(postChannelRes);
 
         }catch(BaseException baseException) {
-            if(baseException.getStatus().equals(ApiResponseStatus.DUPLICATE_CHANNELNAME_ERROR))
-                return new BaseResponse<>(ApiResponseStatus.DUPLICATE_CHANNELNAME_ERROR);
-            else {
-                log.debug(baseException.getMessage());
-                throw baseException;
-            }
+            return new BaseResponse<>(baseException.getStatus());
         }
+    }
+
+    @Operation(summary = "채널 삭제", description = "채널id를 URL 경로로 받고 해당 채널을 삭제하는 api")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "요청에 성공했습니다."),
+            @ApiResponse(responseCode = "400", description = "존재하지 않는 채널입니다.")
+    })
+    @DeleteMapping()
+    public BaseResponse<ApiResponseStatus> deleteChannel(@PathVariable Long channelId) {
+        try {
+
+            channelService.deleteChannelById(channelId);
+            return new BaseResponse<>(ApiResponseStatus.SUCCESS);
+
+        }catch(BaseException baseException) {
+            return new BaseResponse<>(baseException.getStatus());
+        }
+    }
+
+    @GetMapping()
+    public BaseResponse<GetChannelRes> getChannels() {
+        GetChannelRes getChannelRes = channelService.listAllChannels();
+        return new BaseResponse<>(getChannelRes);
     }
 }
