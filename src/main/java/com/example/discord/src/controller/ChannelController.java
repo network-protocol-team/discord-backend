@@ -47,8 +47,10 @@ public class ChannelController {
             @ApiResponse(responseCode = "200", description = "요청에 성공했습니다."),
             @ApiResponse(responseCode = "400", description = "존재하지 않는 채널입니다.")
     })
-    @DeleteMapping()
-    public BaseResponse<ApiResponseStatus> deleteChannel(@PathVariable Long channelId) {
+    @DeleteMapping("/{channelId}")
+    public BaseResponse<ApiResponseStatus> deleteChannel(@PathVariable("channelId")
+                                                 @Schema(description="채널 id", example = "1")
+                                                 Long channelId) {
         try {
 
             channelService.deleteChannelById(channelId);
@@ -59,6 +61,10 @@ public class ChannelController {
         }
     }
 
+    @Operation(summary = "모든 채널 조회", description = "api 요청 시 db에 저장된 모든 채널을 조회하는 api")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "요청에 성공했습니다."),
+    })
     @GetMapping()
     public BaseResponse<GetChannelRes> getChannels() {
         GetChannelRes getChannelRes = channelService.listAllChannels();
