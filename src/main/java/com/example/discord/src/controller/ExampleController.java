@@ -1,5 +1,6 @@
 package com.example.discord.src.controller;
 
+import com.example.discord.common.response.ApiResponseStatus;
 import com.example.discord.common.response.BaseResponse;
 import com.example.discord.src.service.ExampleService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -13,7 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.example.discord.src.service.dto.ExampleRes;
+import com.example.discord.src.dto.ExampleRes;
 
 @RestController
 @RequestMapping("/examples")
@@ -29,7 +30,7 @@ public class ExampleController {
     @ApiResponse(responseCode = "200", description = "요청에 성공하였습니다.", content = @Content(schema = @Schema(implementation = BaseResponse.class), mediaType = "application/json"))
     public BaseResponse<ExampleRes> getHello(){
         ExampleRes exampleRes = exampleService.getHello("gosumdochi");
-        return new BaseResponse<>(exampleRes);
+        return new BaseResponse<ExampleRes>(exampleRes);
     }
 
     @GetMapping("/bye")
@@ -40,6 +41,6 @@ public class ExampleController {
     })
     public BaseResponse<ExampleRes> getBye(){
         ExampleRes exampleRes = exampleService.getBye("tokki");
-        return new BaseResponse<>(exampleRes);
+        return new BaseResponse<ExampleRes>(exampleRes);
     }
 }
