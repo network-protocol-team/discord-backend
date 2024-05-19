@@ -1,6 +1,13 @@
 package com.example.discord.src.controller;
 
+import com.example.discord.common.response.BaseResponse;
 import com.example.discord.src.controller.dto.*;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -9,10 +16,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RestController
+//@Tag(name = "webRTC", description = "webRTC 시그널링 소켓 통신 api")
 public class WebRTCController {
 
 
     /** 신규접속자가 기존의 접속자들의 key를 요청하면 이를 publish한다 */
+//    @Operation(summary = "접속자 리스트 요청", description = "신규접속자가 기존의 접속자들의 key를 요청하면 이를 publish한다")
     @MessageMapping("/channels/{channelId}/call-members")
     @SendTo("/sub/channels/{channelId}/call-members")
     public CallMembersRes callMembers(CallMembersReq callMembersReq,
@@ -29,6 +38,7 @@ public class WebRTCController {
     }
 
     /** 채널의 접속자가 자신의 식별키를 현재 채널접속자들 모두에게 보낸다.*/
+//    @Operation(summary = "유저 식별키 전송", description = "채널의 접속자가 자신의 식별키를 현재 채널접속자들 모두에게 보낸다.")
     @MessageMapping("/channels/{channelId}/send-me")
     @SendTo("/sub/channels/{channelId}/receive-other")
     public SendUserKeyRes sendMeToOther(SendUserKeyReq sendUserKeyReq,
@@ -45,6 +55,7 @@ public class WebRTCController {
     }
 
     /** 신규 접속자가 대상 userKey로 offer를 전송하면, 해당 userKey를 가진 접속자는 신규접속자의 키, offer를 받는다 */
+//    @Operation(summary = "offer 전송", description = "신규 접속자가 대상 userKey로 offer를 전송한다")
     @MessageMapping("/channels/{channelId}/video/offer/{userKey}")
     @SendTo("/sub/channels/{channelId}/video/offer/{userKey}")
     public OfferRes offer(OfferReq offerReq,
@@ -64,6 +75,7 @@ public class WebRTCController {
     }
 
     /** offer를 받은 접속자가 offer제공자에게 answer를 전송하면, 해당 userKey를 가진 접속자는 answer제공자의 키와 answer를 받는다*/
+//    @Operation(summary = "answer 전송", description = "offer제공자에게 자신의 키와 생성한 answer를 전송한다")
     @MessageMapping("/channels/{channelId}/video/answer/{userKey}")
     @SendTo("/sub/channels/{channelId}/video/answer/{userKey}")
     public AnswerRes answer(AnswerReq answerReq,
@@ -83,6 +95,7 @@ public class WebRTCController {
     }
 
     /** ice candidate 이벤트가 발생한 user는 자신의 userKey와 ice candidate를 다른 접속자 userKey에게 전송한다. */
+//    @Operation(summary = "ice-candidate 전송", description = "채널 접속자에게 자신의 key와 ice-canddiate 를 전송한다")
     @MessageMapping("/channels/{channelId}/video/ice-candidate/{userKey}")
     @SendTo("/sub/channels/{channelId}/video/ice-candidate/{userKey}")
     public IceCandidateRes iceCandidate(IceCandidateReq iceCandidateReq,
