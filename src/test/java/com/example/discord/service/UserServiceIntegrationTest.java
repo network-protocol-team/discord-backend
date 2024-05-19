@@ -8,11 +8,19 @@ import com.example.discord.src.entity.User;
 import com.example.discord.src.repository.UserRepository;
 import com.example.discord.src.service.UserService;
 import com.example.discord.src.dto.PostUserRes;
+import jakarta.servlet.ServletOutputStream;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Collection;
+import java.util.Locale;
 
 @Slf4j
 @SpringBootTest
@@ -38,25 +46,6 @@ public class UserServiceIntegrationTest {
             log.info("message: {}", baseException.getMessage());
 
             Assertions.assertEquals(true, userRepository.findByNickName(nickName).isPresent());
-        }
-    }
-
-    @Test
-    public void postUser() {
-        PostUserReq postUserReq = new PostUserReq("user8");
-
-        BaseResponse<PostUserRes> responseBody = userController.postUser(postUserReq);
-
-        log.info("success: {}", responseBody.getIsSuccess());
-        log.info("code: {}", responseBody.getCode());
-        log.info("message: {}", responseBody.getMessage());
-
-        if(responseBody.getIsSuccess()) {
-            PostUserRes postUserRes = responseBody.getResult();
-
-            log.info("result: ");
-            log.info("nickName: {}", postUserRes.getNickName());
-            log.info("cookie: {}", postUserRes.getCookie().getValue());
         }
     }
 }

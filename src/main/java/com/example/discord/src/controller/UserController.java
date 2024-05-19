@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -33,7 +34,7 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "중복된 유저이름입니다.", content = @Content(schema = @Schema(implementation = BaseResponse.class), mediaType = "application/json"))
     })
     @PostMapping()
-    public BaseResponse<PostUserRes> postUser(@RequestBody PostUserReq postUserReq) {
+    public BaseResponse<PostUserRes> postUser(HttpServletResponse httpServletResponse, @RequestBody PostUserReq postUserReq) {
         try {
             PostUserRes postUserRes = userService.signUp(postUserReq);
 
@@ -41,7 +42,7 @@ public class UserController {
             Cookie cookie = new Cookie("userId", String.valueOf(postUserRes.getUserId()));
             cookie.setHttpOnly(true);
             cookie.setPath("/");
-            postUserRes.setCookie(cookie);
+            httpServletResponse.addCookie(cookie);
 
             return new BaseResponse<>(postUserRes);
 

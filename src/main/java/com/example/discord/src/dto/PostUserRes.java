@@ -13,8 +13,4 @@ public class PostUserRes {
 
     @Schema(description = "유저 닉네임")
     private String nickName;
-
-    @Setter
-    @Schema(description = "쿠키")
-    private Cookie cookie;
 }

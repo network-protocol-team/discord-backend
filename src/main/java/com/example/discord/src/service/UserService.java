@@ -17,11 +17,6 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    /* nickname 중복 체크 */
-    private Boolean validateDuplicateNickName(String nickName) {
-        return userRepository.findByNickName(nickName).isPresent();
-    }
-
     /* 유저 가입 */
     public PostUserRes signUp(PostUserReq postUserReq){
 
@@ -40,5 +35,10 @@ public class UserService {
         log.info("user " + user.getNickName() + " created");
 
         return postUserRes;
+    }
+
+    /* nickname 중복 체크 */
+    private Boolean validateDuplicateNickName(String nickName) {
+        return userRepository.findByNickName(nickName).isPresent();
     }
 }
