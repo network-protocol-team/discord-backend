@@ -15,7 +15,6 @@ public class User {
     @Column(name = "nickname", nullable = false)
     private String nickName;
 
-    @Builder
     public User(String nickName) {
         this.nickName = nickName;
     }

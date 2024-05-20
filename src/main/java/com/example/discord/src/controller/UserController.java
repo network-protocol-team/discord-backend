@@ -1,7 +1,6 @@
 package com.example.discord.src.controller;
 
 import com.example.discord.common.exception.BaseException;
-import com.example.discord.common.response.ApiResponseStatus;
 import com.example.discord.common.response.BaseResponse;
 import com.example.discord.src.dto.PostUserReq;
 import com.example.discord.src.service.UserService;
@@ -18,11 +17,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
-
 @RestController
 @RequestMapping("/users")
-@Tag(name = "users", description = "유저 등록 api")
+@Tag(name = "users", description = "유저 api")
 @RequiredArgsConstructor
 @Slf4j
 public class UserController {
@@ -36,7 +33,7 @@ public class UserController {
     @PostMapping()
     public BaseResponse<PostUserRes> postUser(HttpServletResponse httpServletResponse, @RequestBody PostUserReq postUserReq) {
         try {
-            PostUserRes postUserRes = userService.signUp(postUserReq);
+            PostUserRes postUserRes = userService.signUp(postUserReq.getNickName());
 
             /* TODO: 쿠키 생성 */
             Cookie cookie = new Cookie("userId", String.valueOf(postUserRes.getUserId()));

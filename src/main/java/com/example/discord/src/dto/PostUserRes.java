@@ -1,7 +1,6 @@
 package com.example.discord.src.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.servlet.http.Cookie;
 import lombok.*;
 
 @Getter
