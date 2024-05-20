@@ -1,11 +1,8 @@
 package com.example.discord.service;
 
-import com.example.discord.common.response.ApiResponseStatus;
-import com.example.discord.common.response.BaseResponse;
-import com.example.discord.src.controller.ChannelController;
-import com.example.discord.src.dto.GetChannelRes;
-import com.example.discord.src.dto.PostChannelReq;
+import com.example.discord.common.exception.BaseException;
 import com.example.discord.src.dto.PostChannelRes;
+import com.example.discord.src.entity.Channel;
 import com.example.discord.src.repository.ChannelRepository;
 import com.example.discord.src.service.ChannelService;
 import lombok.extern.slf4j.Slf4j;
@@ -13,35 +10,33 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Slf4j
 @SpringBootTest
 public class ChannelServiceIntegrationTest {
-    @Autowired ChannelController channelController;
     @Autowired ChannelService channelService;
     @Autowired ChannelRepository channelRepository;
 
     @Test
-    public void postChannel() {
-        PostChannelReq postChannelReq = new PostChannelReq("채널3");
-        BaseResponse<PostChannelRes> responseBody = channelController.postChannel(postChannelReq);
+    public void createChannel() {
+        String channelName = "채널3";
 
-        log.info("success: {}", responseBody.getIsSuccess());
-        log.info("code: {}", responseBody.getCode());
-        log.info("message: {}", responseBody.getMessage());
+        try {
 
-        if(responseBody.getIsSuccess()) {
-            PostChannelRes postChannelRes = responseBody.getResult();
+            PostChannelRes postChannelRes = channelService.createChannel(channelName);
 
-            log.info("result: ");
             log.info("channelId: {}", postChannelRes.getChannelId());
             log.info("channelName: {}", postChannelRes.getChannelName());
 
-            Assertions.assertEquals(postChannelReq.getChannelName(), postChannelRes.getChannelName());
-        }
-        else {
+            Assertions.assertEquals(channelName,
+                    postChannelRes.getChannelName());
+
+        }catch(BaseException baseException) {
             Assertions.assertEquals(true, channelRepository.
-                    findByChannelName(postChannelReq.getChannelName())
+                    findByChannelName(channelName)
                     .isPresent());
         }
     }
@@ -49,26 +44,39 @@ public class ChannelServiceIntegrationTest {
     @Test
     public void deleteChannel() {
         Long channelId = 1L;
-        BaseResponse<ApiResponseStatus> responseBody = channelController.deleteChannel(channelId);
+        try {
+            channelService.deleteChannelById(channelId);
 
-        log.info("success: {}", responseBody.getIsSuccess());
-        log.info("code: {}", responseBody.getCode());
-        log.info("message: {}", responseBody.getMessage());
+            Assertions.assertEquals(true, channelRepository
+                    .findById(channelId)
+                    .isEmpty());
 
-        Assertions.assertEquals(false, channelRepository.existsById(channelId));
+        }catch(BaseException baseException) {
+            Assertions.assertEquals(true, channelRepository
+                    .findById(channelId)
+                    .isEmpty());
+        }
     }
 
     @Test
-    public void getChannels() {
-        BaseResponse<GetChannelRes> responseBody = channelController.getChannels();
+    public void listAllChannels() {
+        List<Channel> channelList = channelService.listAllChannels();
 
-        log.info("success: {}", responseBody.getIsSuccess());
-        log.info("code: {}", responseBody.getCode());
-        log.info("message: {}", responseBody.getMessage());
-
-        responseBody.getResult().getGetChannelResList()
-                .stream()
+        channelList.stream()
                 .map(c -> c.getChannelName())
                 .forEach(channelName -> log.info("channelName: {}", channelName));
+    }
+
+    @Test
+    @Transactional
+    public void listChannelMessages() {
+        Long channelId = 2L;
+
+        channelService.listChannelMessages(channelId).stream()
+                .forEach(m -> {
+                    log.info("nickName: {}", m.getUser().getNickName());
+                    log.info("content: {}", m.getContent());
+                    log.info("createdAt: {}", m.getCreatedAt());
+                });
     }
 }

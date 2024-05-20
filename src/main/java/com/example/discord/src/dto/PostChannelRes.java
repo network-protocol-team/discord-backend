@@ -6,7 +6,7 @@ import lombok.Getter;
 
 @Getter
 @Builder
-@Schema(description="방 생성 response DTO")
+@Schema(description="채널 생성 response DTO")
 public class PostChannelRes {
     @Schema(description = "채널 id")
     private Long channelId;

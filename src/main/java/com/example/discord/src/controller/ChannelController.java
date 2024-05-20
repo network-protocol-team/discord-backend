@@ -3,9 +3,7 @@ package com.example.discord.src.controller;
 import com.example.discord.common.exception.BaseException;
 import com.example.discord.common.response.ApiResponseStatus;
 import com.example.discord.common.response.BaseResponse;
-import com.example.discord.src.dto.GetChannelRes;
-import com.example.discord.src.dto.PostChannelReq;
-import com.example.discord.src.dto.PostChannelRes;
+import com.example.discord.src.dto.*;
 import com.example.discord.src.service.ChannelService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -17,9 +15,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @RestController
 @RequestMapping("/channels")
-@Tag(name = "channels", description = "채널 생성 api")
+@Tag(name = "channels", description = "채널 api")
 @RequiredArgsConstructor
 @Slf4j
 public class ChannelController {
@@ -34,7 +35,7 @@ public class ChannelController {
     public BaseResponse<PostChannelRes> postChannel(@RequestBody PostChannelReq postChannelReq) {
         try {
 
-            PostChannelRes postChannelRes = channelService.createChannel(postChannelReq);
+            PostChannelRes postChannelRes = channelService.createChannel(postChannelReq.getChannelName());
             return new BaseResponse<>(postChannelRes);
 
         }catch(BaseException baseException) {
@@ -67,7 +68,47 @@ public class ChannelController {
     })
     @GetMapping()
     public BaseResponse<GetChannelRes> getChannels() {
-        GetChannelRes getChannelRes = channelService.listAllChannels();
-        return new BaseResponse<>(getChannelRes);
+
+        List<GetChannelRes> channelResList = new ArrayList<>();
+
+        channelService.listAllChannels().stream()
+                .forEach(c -> {
+                    GetChannelRes getChannelRes = GetChannelRes.builder()
+                            .channelId(c.getChannelId())
+                            .channelName(c.getChannelName())
+                            .build();
+                    channelResList.add(getChannelRes);
+                });
+
+        return new BaseResponse(channelResList);
+    }
+
+    @Operation(summary = "채널 채팅 내역 조회", description = "채널 id를 받아 해당 채널 채팅 내역을 조회하는 api")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "요청에 성공했습니다."),
+    })
+    @GetMapping("/{channelId}")
+    public BaseResponse<GetMessageRes> getChannelMessages(@PathVariable("channelId")
+                                                                     @Schema(description="채널 id", example = "1")
+                                                                             Long channelId) {
+        try {
+
+            List<GetMessageRes> messageResList = new ArrayList<>();
+
+            channelService.listChannelMessages(channelId).stream()
+                    .forEach(m -> {
+                        GetMessageRes getMessageRes = GetMessageRes.builder()
+                                .nickName(m.getUser().getNickName())
+                                .createdAt(m.getCreatedAt())
+                                .content(m.getContent())
+                                .build();
+                        messageResList.add(getMessageRes);
+                    });
+
+            return new BaseResponse(messageResList);
+
+        }catch(BaseException baseException) {
+            return new BaseResponse<>(baseException.getStatus());
+        }
     }
 }

@@ -1,13 +1,15 @@
 package com.example.discord.src.dto;
 
-import com.example.discord.src.entity.Channel;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-
-import java.util.List;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.*;
 
 @Getter
-@RequiredArgsConstructor
+@Builder
+@Schema(description="채널 조회 response DTO")
 public class GetChannelRes {
-    private final List<Channel> getChannelResList;
+    @Schema(description = "채널 id")
+    private Long channelId;
+
+    @Schema(description = "채널명")
+    private String channelName;
 }

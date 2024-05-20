@@ -1,14 +1,11 @@
 package com.example.discord.src.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
 @Schema(description="채널 생성 request DTO")
 public class PostChannelReq {
     @Schema(description = "채널명")
