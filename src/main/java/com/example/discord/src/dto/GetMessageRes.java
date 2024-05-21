@@ -4,7 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Getter
 @Builder
@@ -17,5 +17,5 @@ public class GetMessageRes {
     String content;
 
     @Schema(description = "메시지 생성 시간")
-    Timestamp createdAt;
+    LocalDateTime createdAt;
 }

@@ -3,8 +3,9 @@ package com.example.discord.src.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -26,9 +27,10 @@ public class Message {
     @Column(name = "content")
     private String content;
 
+    @CreationTimestamp
     @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)
-    private Timestamp createdAt;
+    private LocalDateTime createdAt;
 
     public Message(String content) {
         this.content = content;

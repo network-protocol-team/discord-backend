@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
@@ -19,10 +20,11 @@ public class MessageServiceIntegrationTest {
 
     @Test
     @Transactional
+    @Rollback(false)
     public void storeMessage() {
         String nickName = "test";
         Long channelId = 2L;
-        String content = "Hello";
+        String content = "timeformatcheck";
 
         GetMessageRes getMessageRes = messageService.storeMessage(nickName, channelId, content);
 
