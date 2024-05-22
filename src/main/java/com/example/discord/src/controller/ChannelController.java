@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/channels")
+@RequestMapping("/api/channels")
 @Tag(name = "channels", description = "채널 api")
 @RequiredArgsConstructor
 @Slf4j
