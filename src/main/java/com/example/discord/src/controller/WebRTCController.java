@@ -2,55 +2,71 @@ package com.example.discord.src.controller;
 
 import com.example.discord.common.response.BaseResponse;
 import com.example.discord.src.controller.dto.*;
+import com.example.discord.src.service.ParticipantManageService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @Slf4j
 @RestController
+@RequiredArgsConstructor
 //@Tag(name = "webRTC", description = "webRTC 시그널링 소켓 통신 api")
 public class WebRTCController {
 
+    private final ParticipantManageService participantManageService;
 
-    /** 신규접속자가 기존의 접속자들의 key를 요청하면 이를 publish한다 */
-//    @Operation(summary = "접속자 리스트 요청", description = "신규접속자가 기존의 접속자들의 key를 요청하면 이를 publish한다")
-    @MessageMapping("/channels/{channelId}/call-members")
-    @SendTo("/sub/channels/{channelId}/call-members")
-    public CallMembersRes callMembers(CallMembersReq callMembersReq,
-                                      @DestinationVariable(value = "channelId") String channelId){
+//    /** 신규접속자가 기존의 접속자들의 key를 요청하면 이를 publish한다 */
+////    @Operation(summary = "접속자 리스트 요청", description = "신규접속자가 기존의 접속자들의 key를 요청하면 이를 publish한다")
+//    @MessageMapping("/channels/{channelId}/call-members")
+//    @SendTo("/sub/channels/{channelId}/call-members")
+//    public CallMembersRes callMembers(CallMembersReq callMembersReq,
+//                                      @DestinationVariable(value = "channelId") String channelId){
+//
+//        log.info("callMembers : channelId = {}, sender = {} ", callMembersReq.getChannelId(), callMembersReq.getSender());
+//
+//        CallMembersRes callMembersRes = CallMembersRes.builder()
+//                        .sender(callMembersReq.getSender())
+//                        .channelId(callMembersReq.getChannelId())
+//                        .build();
+//
+//        return callMembersRes;
+//    }
 
-        log.info("callMembers : channelId = {}, sender = {} ", callMembersReq.getChannelId(), callMembersReq.getSender());
-
-        CallMembersRes callMembersRes = CallMembersRes.builder()
-                        .sender(callMembersReq.getSender())
-                        .channelId(callMembersReq.getChannelId())
-                        .build();
-
-        return callMembersRes;
-    }
-
-    /** 채널의 접속자가 자신의 식별키를 현재 채널접속자들 모두에게 보낸다.*/
+    /** 채널의 접속자가 자신의 식별키를 보내면 서버에서는 참석자 정보를 갱신하고 현재 채널접속자들 모두에게 현재 참석자 정보를 보낸다.*/
 //    @Operation(summary = "유저 식별키 전송", description = "채널의 접속자가 자신의 식별키를 현재 채널접속자들 모두에게 보낸다.")
     @MessageMapping("/channels/{channelId}/send-me")
     @SendTo("/sub/channels/{channelId}/receive-other")
     public SendUserKeyRes sendMeToOther(SendUserKeyReq sendUserKeyReq,
                                         @DestinationVariable(value = "channelId") String channelId){
 
-        log.info("sendMeToOthers : channelId = {}, sender = {}, userKey = {}", sendUserKeyReq.getChannelId(), sendUserKeyReq.getSender(), sendUserKeyReq.getUserKey());
+        log.info("sendMeToOthers : channelId = {}, sender = {}, userKey = {}, state = {}", sendUserKeyReq.getChannelId(), sendUserKeyReq.getSender(), sendUserKeyReq.getUserKey(), sendUserKeyReq.getState());
+
+        List<String> participants = null;
+        if(sendUserKeyReq.getState().equals("join")){
+            participants = participantManageService.addParticipants(sendUserKeyReq.getChannelId(), sendUserKeyReq.getUserKey());
+        }else if(sendUserKeyReq.getState().equals("out")) {
+            participants = participantManageService.removeParticipants(sendUserKeyReq.getChannelId(), sendUserKeyReq.getUserKey());
+        }
 
         SendUserKeyRes sendUserKeyRes = SendUserKeyRes.builder()
                 .sender(sendUserKeyReq.getSender())
                 .channelId(sendUserKeyReq.getChannelId())
-                .userKey(sendUserKeyReq.getUserKey())
+                .userKeys(participants)
                 .build();
+
+        log.info("{}", participants.toString());
+
         return sendUserKeyRes;
     }
 
