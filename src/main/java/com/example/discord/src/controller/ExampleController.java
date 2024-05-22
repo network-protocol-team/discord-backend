@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.discord.src.dto.ExampleRes;
 
 @RestController
-@RequestMapping("/api/examples")
+@RequestMapping("/examples")
 @Tag(name = "example", description = "여러 인사하기 api")        // 해당 컨트롤러에 대한 swagger 이름과 설명 등을 설정한다
 @RequiredArgsConstructor
 @Slf4j
