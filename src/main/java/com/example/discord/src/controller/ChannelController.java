@@ -69,18 +69,22 @@ public class ChannelController {
     @GetMapping()
     public BaseResponse<GetChannelRes> getChannels() {
 
-        List<GetChannelRes> channelResList = new ArrayList<>();
+        List<GetChannelDTO> channelResList = new ArrayList<>();
 
         channelService.listAllChannels().stream()
                 .forEach(c -> {
-                    GetChannelRes getChannelRes = GetChannelRes.builder()
+                    GetChannelDTO getChannelRes = GetChannelDTO.builder()
                             .channelId(c.getChannelId())
                             .channelName(c.getChannelName())
                             .build();
                     channelResList.add(getChannelRes);
                 });
 
-        return new BaseResponse(channelResList);
+        GetChannelRes getChannelRes = GetChannelRes.builder()
+                .channels(channelResList)
+                .build();
+
+        return new BaseResponse<>(getChannelRes);
     }
 
     @Operation(summary = "채널 채팅 내역 조회", description = "채널 id를 받아 해당 채널 채팅 내역을 조회하는 api")
@@ -88,9 +92,9 @@ public class ChannelController {
             @ApiResponse(responseCode = "200", description = "요청에 성공했습니다."),
     })
     @GetMapping("/{channelId}")
-    public BaseResponse<GetMessageRes> getChannelMessages(@PathVariable("channelId")
-                                                                     @Schema(description="채널 id", example = "1")
-                                                                             Long channelId) {
+    public BaseResponse<GetChannelMessageRes> getChannelMessages(@PathVariable("channelId")
+                                                                 @Schema(description="채널 id", example = "1")
+                                                                 Long channelId) {
         try {
 
             List<GetMessageRes> messageResList = new ArrayList<>();
@@ -105,7 +109,11 @@ public class ChannelController {
                         messageResList.add(getMessageRes);
                     });
 
-            return new BaseResponse(messageResList);
+            GetChannelMessageRes getChannelMessageRes = GetChannelMessageRes.builder()
+                    .messages(messageResList)
+                    .build();
+
+            return new BaseResponse<>(getChannelMessageRes);
 
         }catch(BaseException baseException) {
             return new BaseResponse<>(baseException.getStatus());
