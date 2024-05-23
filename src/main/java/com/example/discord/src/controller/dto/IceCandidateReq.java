@@ -9,5 +9,5 @@ public class IceCandidateReq {
     private final String sender;
     private final String channelId;
     private final String userKey;
-    private final String iceCandidate;
+    private final Object iceCandidate;
 }

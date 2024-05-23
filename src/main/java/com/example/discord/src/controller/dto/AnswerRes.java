@@ -11,5 +11,5 @@ public class AnswerRes {
     private final String sender;
     private final String channelId;
     private final String userKey;
-    private final String answer;
+    private final Object answer;
 }

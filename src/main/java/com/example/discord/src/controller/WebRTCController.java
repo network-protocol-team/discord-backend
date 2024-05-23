@@ -51,7 +51,6 @@ public class WebRTCController {
                                         @DestinationVariable(value = "channelId") String channelId){
 
         log.info("sendMeToOthers : channelId = {}, sender = {}, userKey = {}, state = {}", sendUserKeyReq.getChannelId(), sendUserKeyReq.getSender(), sendUserKeyReq.getUserKey(), sendUserKeyReq.getState());
-
         List<String> participants = null;
         if(sendUserKeyReq.getState().equals("join")){
             participants = participantManageService.addParticipants(sendUserKeyReq.getChannelId(), sendUserKeyReq.getUserKey());
@@ -65,7 +64,6 @@ public class WebRTCController {
                 .userKeys(participants)
                 .build();
 
-        log.info("{}", participants.toString());
 
         return sendUserKeyRes;
     }

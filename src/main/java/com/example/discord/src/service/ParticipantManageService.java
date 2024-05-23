@@ -1,21 +1,24 @@
 package com.example.discord.src.service;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 
+@Slf4j
 @Service
 public class ParticipantManageService {
-    private static HashMap<String, Set<String>> channelParticipants = new HashMap<>();
+    private static final HashMap<String, Set<String>> channelParticipants = new HashMap<>();
 
-    public List<String> addParticipants(String channelId, String userKey){
-        Set<String> participants = channelParticipants.getOrDefault(channelId, new HashSet<>());
+    public synchronized List<String> addParticipants(String channelId, String userKey){
+        Set<String> participants = channelParticipants.computeIfAbsent(channelId, k -> new HashSet<>());
         participants.add(userKey);
         return participants.stream().toList();
     }
 
-    public List<String> removeParticipants(String channelId, String userKey){
-        Set<String> participants = channelParticipants.getOrDefault(channelId, new HashSet<>());
+    public synchronized List<String> removeParticipants(String channelId, String userKey){
+        Set<String> participants = channelParticipants.computeIfAbsent(channelId, k -> new HashSet<>());
         participants.remove(userKey);
         return participants.stream().toList();
     }
