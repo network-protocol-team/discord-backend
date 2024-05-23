@@ -9,4 +9,5 @@ public class SendUserKeyReq {
     private final String sender;
     private final String channelId;
     private final String userKey;
+    private final String state;
 }
