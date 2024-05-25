@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @Slf4j
@@ -25,7 +26,7 @@ public class MessageService {
     private final ChannelRepository channelRepository;
 
     @Transactional
-    public GetMessageRes storeMessage(String nickName, Long channelId, String content) {
+    public GetMessageRes storeMessage(String nickName, UUID channelId, String content) {
         Optional<User> user = userRepository.findByNickName(nickName);
         Optional<Channel> channel = channelRepository.findById(channelId);
 

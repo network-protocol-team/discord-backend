@@ -13,6 +13,8 @@ import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 
+import java.util.UUID;
+
 @Controller
 @RequiredArgsConstructor
 @Slf4j
@@ -21,7 +23,7 @@ public class MessageController {
 
     @MessageMapping("/pub/channels/{channelId}/text")
     @SendTo("/sub/channels/{channelId}/text")
-    public BaseResponse<PubMessageReq> publishMessage(@DestinationVariable Long channelId,
+    public BaseResponse<PubMessageReq> publishMessage(@DestinationVariable UUID channelId,
                                                       @Payload PubMessageReq pubMessageReq) {
         try {
 

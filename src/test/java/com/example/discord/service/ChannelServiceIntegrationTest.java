@@ -13,6 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.UUID;
 
 @Slf4j
 @SpringBootTest
@@ -43,7 +44,7 @@ public class ChannelServiceIntegrationTest {
 
     @Test
     public void deleteChannel() {
-        Long channelId = 1L;
+        UUID channelId = UUID.randomUUID();
         try {
             channelService.deleteChannelById(channelId);
 
@@ -70,7 +71,7 @@ public class ChannelServiceIntegrationTest {
     @Test
     @Transactional
     public void listChannelMessages() {
-        Long channelId = 2L;
+        UUID channelId = UUID.randomUUID();
 
         channelService.listChannelMessages(channelId).stream()
                 .forEach(m -> {

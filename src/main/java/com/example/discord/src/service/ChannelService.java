@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @Slf4j
@@ -39,7 +40,7 @@ public class ChannelService {
 
     /* 채널 삭제 */
     @Transactional
-    public void deleteChannelById(Long channelId) {
+    public void deleteChannelById(UUID channelId) {
         validateChannelId(channelId);
         channelRepository.deleteById(channelId);
     }
@@ -53,7 +54,7 @@ public class ChannelService {
 
     /* 채널 채팅 내역 전체 조회 */
     @Transactional(readOnly = true)
-    public List<Message> listChannelMessages(Long channelId) {
+    public List<Message> listChannelMessages(UUID channelId) {
         validateChannelId(channelId);
 
         List<Message> messageList = channelRepository.findById(channelId).get()
@@ -71,7 +72,7 @@ public class ChannelService {
 
     /* 채널 id 유효 체크 */
     @Transactional(readOnly = true)
-    public void validateChannelId(Long channelId) {
+    public void validateChannelId(UUID channelId) {
         if(channelRepository.findById(channelId).isEmpty())
             throw new BaseException(ApiResponseStatus.NO_EXIST_CHANNEL_ERROR);
     }

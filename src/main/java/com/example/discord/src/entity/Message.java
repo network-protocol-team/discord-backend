@@ -21,7 +21,7 @@ public class Message {
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "channel_id", referencedColumnName = "id")
+    @JoinColumn(name = "channel_id")
     private Channel channel;
 
     @Column(name = "content")

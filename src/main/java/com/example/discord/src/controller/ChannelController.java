@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/channels")
@@ -51,7 +52,7 @@ public class ChannelController {
     @DeleteMapping("/{channelId}")
     public BaseResponse<ApiResponseStatus> deleteChannel(@PathVariable("channelId")
                                                  @Schema(description="채널 id", example = "1")
-                                                 Long channelId) {
+                                                                 UUID channelId) {
         try {
 
             channelService.deleteChannelById(channelId);
@@ -88,9 +89,9 @@ public class ChannelController {
             @ApiResponse(responseCode = "200", description = "요청에 성공했습니다."),
     })
     @GetMapping("/{channelId}")
-    public BaseResponse<GetMessageRes> getChannelMessages(@PathVariable("channelId")
+    public BaseResponse<GetChannelMessageRes> getChannelMessages(@PathVariable("channelId")
                                                                      @Schema(description="채널 id", example = "1")
-                                                                             Long channelId) {
+                                                                             UUID channelId) {
         try {
 
             List<GetMessageRes> messageResList = new ArrayList<>();
@@ -105,7 +106,11 @@ public class ChannelController {
                         messageResList.add(getMessageRes);
                     });
 
-            return new BaseResponse(messageResList);
+            GetChannelMessageRes getChannelMessageRes = GetChannelMessageRes.builder()
+                    .getMessageResList(messageResList)
+                    .build();
+
+            return new BaseResponse(getChannelMessageRes);
 
         }catch(BaseException baseException) {
             return new BaseResponse<>(baseException.getStatus());

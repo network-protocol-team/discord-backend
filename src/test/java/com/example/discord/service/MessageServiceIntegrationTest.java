@@ -2,7 +2,6 @@ package com.example.discord.service;
 
 import com.example.discord.src.dto.GetMessageRes;
 import com.example.discord.src.repository.ChannelRepository;
-import com.example.discord.src.repository.MessageRepository;
 import com.example.discord.src.service.MessageService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
@@ -11,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.UUID;
 
 @Slf4j
 @SpringBootTest
@@ -23,7 +24,7 @@ public class MessageServiceIntegrationTest {
     @Rollback(false)
     public void storeMessage() {
         String nickName = "test";
-        Long channelId = 2L;
+        UUID channelId = UUID.randomUUID();
         String content = "timeformatcheck";
 
         GetMessageRes getMessageRes = messageService.storeMessage(nickName, channelId, content);
