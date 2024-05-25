@@ -51,7 +51,7 @@ public class ChannelController {
     })
     @DeleteMapping("/{channelId}")
     public BaseResponse<ApiResponseStatus> deleteChannel(@PathVariable("channelId")
-                                                 @Schema(description="채널 id", example = "1")
+                                                 @Schema(description="채널 id", example = "a5263a4a-b036-49b1-9dd3-58dcbf3207b8")
                                                                  UUID channelId) {
         try {
 
@@ -94,7 +94,7 @@ public class ChannelController {
     })
     @GetMapping("/{channelId}")
     public BaseResponse<GetChannelMessageRes> getChannelMessages(@PathVariable("channelId")
-                                                                     @Schema(description="채널 id", example = "1")
+                                                                     @Schema(description="채널 id", example = "a5263a4a-b036-49b1-9dd3-58dcbf3207b8")
                                                                              UUID channelId) {
         try {
 

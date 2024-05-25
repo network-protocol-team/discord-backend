@@ -19,7 +19,7 @@ public class UserServiceIntegrationTest {
 
     @Test
     public void signUp() {
-        String nickName = "user10";
+        String nickName = "user2";
 
         try {
             PostUserRes postUserRes = userService.signUp(nickName);

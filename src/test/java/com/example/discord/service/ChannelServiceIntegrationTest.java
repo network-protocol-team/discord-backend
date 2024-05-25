@@ -23,7 +23,7 @@ public class ChannelServiceIntegrationTest {
 
     @Test
     public void createChannel() {
-        String channelName = "채널3";
+        String channelName = "채널2";
 
         try {
 
@@ -44,7 +44,7 @@ public class ChannelServiceIntegrationTest {
 
     @Test
     public void deleteChannel() {
-        UUID channelId = UUID.randomUUID();
+        UUID channelId = UUID.fromString("2cb60561-b997-4f78-8e20-342a3678d9b4");
         try {
             channelService.deleteChannelById(channelId);
 
@@ -71,7 +71,7 @@ public class ChannelServiceIntegrationTest {
     @Test
     @Transactional
     public void listChannelMessages() {
-        UUID channelId = UUID.randomUUID();
+        UUID channelId = UUID.fromString("646bd3c3-f654-49d8-a084-6e7fc558de9e");
 
         channelService.listChannelMessages(channelId).stream()
                 .forEach(m -> {
