@@ -23,11 +23,12 @@ public class MessageServiceIntegrationTest {
     @Transactional
     @Rollback(false)
     public void storeMessage() {
-        String nickName = "test";
-        UUID channelId = UUID.randomUUID();
-        String content = "timeformatcheck";
+        String nickName = "user2";
+        UUID channelId = UUID.fromString("646bd3c3-f654-49d8-a084-6e7fc558de9e");
+        String content = "bye";
 
-        GetMessageDTO getMessageDTO = messageService.storeMessage(nickName, channelId, content);
+        UUID messageId = messageService.storeMessage(nickName, channelId, content);
+        GetMessageDTO getMessageDTO = messageService.findMessageById(messageId);
 
         log.info("nickName: {}", getMessageDTO.getNickName());
         log.info("content: {}", getMessageDTO.getContent());

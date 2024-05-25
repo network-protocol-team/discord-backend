@@ -12,6 +12,7 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.UUID;
 
@@ -21,14 +22,16 @@ import java.util.UUID;
 public class MessageController {
     private final MessageService messageService;
 
-    @MessageMapping("/pub/channels/{channelId}/text")
+    @MessageMapping("/channels/{channelId}/text")
     @SendTo("/sub/channels/{channelId}/text")
-    public BaseResponse<PubMessageReq> publishMessage(@DestinationVariable UUID channelId,
+    public BaseResponse<PubMessageReq> publishMessage(@DestinationVariable("channelId") UUID channelId,
                                                       @Payload PubMessageReq pubMessageReq) {
         try {
 
-            GetMessageDTO getMessageDTO = messageService.storeMessage(
+            UUID messageId = messageService.storeMessage(
                     pubMessageReq.getNickName(), channelId, pubMessageReq.getContent());
+
+            GetMessageDTO getMessageDTO = messageService.findMessageById(messageId);
 
             return new BaseResponse(getMessageDTO);
 

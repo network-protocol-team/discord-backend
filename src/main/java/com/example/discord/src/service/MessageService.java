@@ -9,11 +9,15 @@ import com.example.discord.src.entity.User;
 import com.example.discord.src.repository.ChannelRepository;
 import com.example.discord.src.repository.MessageRepository;
 import com.example.discord.src.repository.UserRepository;
+import jakarta.persistence.EntityListeners;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cglib.core.Local;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -26,7 +30,7 @@ public class MessageService {
     private final ChannelRepository channelRepository;
 
     @Transactional
-    public GetMessageDTO storeMessage(String nickName, UUID channelId, String content) {
+    public UUID storeMessage(String nickName, UUID channelId, String content) {
         Optional<User> user = userRepository.findByNickName(nickName);
         Optional<Channel> channel = channelRepository.findById(channelId);
 
@@ -40,6 +44,14 @@ public class MessageService {
         message.addUser(user.get());
         message.addChannel(channel.get());
         messageRepository.save(message);
+
+        return message.getMessageId();
+    }
+
+    @Transactional
+    public GetMessageDTO findMessageById(UUID messageId) {
+
+        Message message = messageRepository.findById(messageId).get();
 
         GetMessageDTO getMessageDTO = GetMessageDTO.builder()
                 .nickName(message.getUser().getNickName())
