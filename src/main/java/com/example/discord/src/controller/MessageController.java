@@ -2,7 +2,7 @@ package com.example.discord.src.controller;
 
 import com.example.discord.common.exception.BaseException;
 import com.example.discord.common.response.BaseResponse;
-import com.example.discord.src.dto.GetMessageRes;
+import com.example.discord.src.dto.GetMessageDTO;
 import com.example.discord.src.dto.PubMessageReq;
 import com.example.discord.src.service.MessageService;
 import lombok.RequiredArgsConstructor;
@@ -27,10 +27,10 @@ public class MessageController {
                                                       @Payload PubMessageReq pubMessageReq) {
         try {
 
-            GetMessageRes getMessageRes = messageService.storeMessage(
+            GetMessageDTO getMessageDTO = messageService.storeMessage(
                     pubMessageReq.getNickName(), channelId, pubMessageReq.getContent());
 
-            return new BaseResponse(getMessageRes);
+            return new BaseResponse(getMessageDTO);
 
         }catch(BaseException baseException) {
             return new BaseResponse<>(baseException.getStatus());

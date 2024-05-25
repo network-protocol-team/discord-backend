@@ -1,6 +1,6 @@
 package com.example.discord.service;
 
-import com.example.discord.src.dto.GetMessageRes;
+import com.example.discord.src.dto.GetMessageDTO;
 import com.example.discord.src.repository.ChannelRepository;
 import com.example.discord.src.service.MessageService;
 import lombok.extern.slf4j.Slf4j;
@@ -27,11 +27,11 @@ public class MessageServiceIntegrationTest {
         UUID channelId = UUID.randomUUID();
         String content = "timeformatcheck";
 
-        GetMessageRes getMessageRes = messageService.storeMessage(nickName, channelId, content);
+        GetMessageDTO getMessageDTO = messageService.storeMessage(nickName, channelId, content);
 
-        log.info("nickName: {}", getMessageRes.getNickName());
-        log.info("content: {}", getMessageRes.getContent());
-        log.info("createdAt: {}", getMessageRes.getCreatedAt());
+        log.info("nickName: {}", getMessageDTO.getNickName());
+        log.info("content: {}", getMessageDTO.getContent());
+        log.info("createdAt: {}", getMessageDTO.getCreatedAt());
 
         Assertions.assertEquals(true,
                 channelRepository.findById(channelId).get().getMessageList().stream()

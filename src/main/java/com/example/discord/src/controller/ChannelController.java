@@ -70,18 +70,22 @@ public class ChannelController {
     @GetMapping()
     public BaseResponse<GetChannelRes> getChannels() {
 
-        List<GetChannelRes> channelResList = new ArrayList<>();
+        List<GetChannelDTO> channels = new ArrayList<>();
 
         channelService.listAllChannels().stream()
                 .forEach(c -> {
-                    GetChannelRes getChannelRes = GetChannelRes.builder()
+                    GetChannelDTO channelDTO = GetChannelDTO.builder()
                             .channelId(c.getChannelId())
                             .channelName(c.getChannelName())
                             .build();
-                    channelResList.add(getChannelRes);
+                    channels.add(channelDTO);
                 });
 
-        return new BaseResponse(channelResList);
+        GetChannelRes getChannelRes = GetChannelRes.builder()
+                .channelList(channels)
+                .build();
+
+        return new BaseResponse<>(getChannelRes);
     }
 
     @Operation(summary = "채널 채팅 내역 조회", description = "채널 id를 받아 해당 채널 채팅 내역을 조회하는 api")
@@ -94,20 +98,20 @@ public class ChannelController {
                                                                              UUID channelId) {
         try {
 
-            List<GetMessageRes> messageResList = new ArrayList<>();
+            List<GetMessageDTO> messages = new ArrayList<>();
 
             channelService.listChannelMessages(channelId).stream()
                     .forEach(m -> {
-                        GetMessageRes getMessageRes = GetMessageRes.builder()
+                        GetMessageDTO getMessageDTO = GetMessageDTO.builder()
                                 .nickName(m.getUser().getNickName())
                                 .createdAt(m.getCreatedAt())
                                 .content(m.getContent())
                                 .build();
-                        messageResList.add(getMessageRes);
+                        messages.add(getMessageDTO);
                     });
 
             GetChannelMessageRes getChannelMessageRes = GetChannelMessageRes.builder()
-                    .getMessageResList(messageResList)
+                    .messageList(messages)
                     .build();
 
             return new BaseResponse(getChannelMessageRes);

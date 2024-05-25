@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Getter
 @Builder
 @Schema(description="채널 채팅 내역 조회 response DTO")
-public class GetMessageRes {
+public class GetMessageDTO {
     @Schema(description = "유저 닉네임")
     String nickName;
 

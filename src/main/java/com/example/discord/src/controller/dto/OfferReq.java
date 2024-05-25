@@ -9,5 +9,5 @@ public class OfferReq {
     private final String sender;
     private final String channelId;
     private final String userKey;
-    private final String offer;
+    private final Object offer;
 }

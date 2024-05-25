@@ -2,7 +2,7 @@ package com.example.discord.src.service;
 
 import com.example.discord.common.exception.BaseException;
 import com.example.discord.common.response.ApiResponseStatus;
-import com.example.discord.src.dto.GetMessageRes;
+import com.example.discord.src.dto.GetMessageDTO;
 import com.example.discord.src.entity.Channel;
 import com.example.discord.src.entity.Message;
 import com.example.discord.src.entity.User;
@@ -26,7 +26,7 @@ public class MessageService {
     private final ChannelRepository channelRepository;
 
     @Transactional
-    public GetMessageRes storeMessage(String nickName, UUID channelId, String content) {
+    public GetMessageDTO storeMessage(String nickName, UUID channelId, String content) {
         Optional<User> user = userRepository.findByNickName(nickName);
         Optional<Channel> channel = channelRepository.findById(channelId);
 
@@ -41,13 +41,13 @@ public class MessageService {
         message.addChannel(channel.get());
         messageRepository.save(message);
 
-        GetMessageRes getMessageRes = GetMessageRes.builder()
+        GetMessageDTO getMessageDTO = GetMessageDTO.builder()
                 .nickName(message.getUser().getNickName())
                 .createdAt(message.getCreatedAt())
                 .content(message.getContent())
                 .build();
 
-        return getMessageRes;
+        return getMessageDTO;
     }
 
 }

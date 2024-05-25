@@ -14,11 +14,6 @@ import java.util.UUID;
 @Getter
 @NoArgsConstructor
 public class Channel {
-//    @Id
-//    @Column(name = "id")
-//    @GeneratedValue(strategy= GenerationType.IDENTITY)
-//    private Long id;
-
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "channel_id", columnDefinition = "BINARY(16)")
