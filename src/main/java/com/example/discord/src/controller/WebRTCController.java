@@ -96,7 +96,7 @@ public class WebRTCController {
                             @DestinationVariable(value = "channelId") String channelId,
                             @DestinationVariable(value = "userKey") String userKey){
 
-        log.info("answer : channelId  = {}, sender = {}, userKey = {}, answer = {}", answerReq.getChannelId(), answerReq.getSender(), answerReq.getUserKey(), answerReq.getAnswer());
+        log.info("answer : channelId  = {}, sender = {}, userKey = {}", answerReq.getChannelId(), answerReq.getSender(), answerReq.getUserKey());
 
         AnswerRes answerRes = AnswerRes.builder()
                 .sender(answerReq.getSender())
@@ -116,7 +116,7 @@ public class WebRTCController {
                                         @DestinationVariable(value = "channelId") String channelId,
                                         @DestinationVariable(value = "userKey") String userKey){
 
-        log.info("iceCandidate : channelId  = {}, sender = {}, userKey = {}, iceCandidate = {}", iceCandidateReq.getChannelId(), iceCandidateReq.getSender(), iceCandidateReq.getUserKey(), iceCandidateReq.getIceCandidate());
+        log.info("iceCandidate : channelId  = {}, sender = {}, userKey = {}", iceCandidateReq.getChannelId(), iceCandidateReq.getSender(), iceCandidateReq.getUserKey());
 
         IceCandidateRes iceCandidateRes = IceCandidateRes.builder()
                 .sender(iceCandidateReq.getSender())
