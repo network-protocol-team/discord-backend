@@ -9,7 +9,7 @@ services:
       MYSQL_DATABASE: discord
       MYSQL_ROOT_HOST: '%'
       MYSQL_ROOT_PASSWORD: 1234
-      TZ: 'Asia/Seoul'
+      TZ: Asia/Seoul
     ports:
       - "3306:3306"
     volumes:
