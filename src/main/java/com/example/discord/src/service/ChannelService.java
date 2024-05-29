@@ -12,8 +12,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -59,6 +61,10 @@ public class ChannelService {
 
         List<Message> messageList = channelRepository.findById(channelId).get()
                 .getMessageList();
+
+        messageList.stream()
+                .sorted(Comparator.comparing(Message::getCreatedAt))
+                .collect(Collectors.toList());
 
         return messageList;
     }
