@@ -127,4 +127,17 @@ public class WebRTCController {
 
         return iceCandidateRes;
     }
+
+    @MessageMapping("/channels/manage")
+    @SendTo("/sub/channels/manage")
+    public ManageRes manage(ManageReq manageReq){
+        log.info("channels manage : sender = {}, channelId = {}, channelName = {}, status = {}", manageReq.getSender(), manageReq.getChannelId(), manageReq.getChannelName(), manageReq.getStatus());
+        ManageRes manageRes = ManageRes.builder()
+                .channelId(manageReq.getChannelId())
+                .channelName(manageReq.getChannelName())
+                .sender(manageReq.getSender())
+                .status(manageReq.getStatus())
+                .build();
+        return manageRes;
+    }
 }
