@@ -4,6 +4,7 @@ import com.example.discord.common.exception.BaseException;
 import com.example.discord.common.response.ApiResponseStatus;
 import com.example.discord.common.response.BaseResponse;
 import com.example.discord.src.dto.*;
+import com.example.discord.src.entity.Message;
 import com.example.discord.src.service.ChannelService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -15,9 +16,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/channels")
@@ -109,6 +109,8 @@ public class ChannelController {
                                 .build();
                         messages.add(getMessageDTO);
                     });
+
+            Collections.sort(messages, Comparator.comparing(GetMessageDTO::getCreatedAt));
 
             GetChannelMessageRes getChannelMessageRes = GetChannelMessageRes.builder()
                     .messageList(messages)

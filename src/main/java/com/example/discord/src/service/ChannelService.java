@@ -62,10 +62,6 @@ public class ChannelService {
         List<Message> messageList = channelRepository.findById(channelId).get()
                 .getMessageList();
 
-        messageList.stream()
-                .sorted(Comparator.comparing(Message::getCreatedAt))
-                .collect(Collectors.toList());
-
         return messageList;
     }
 
