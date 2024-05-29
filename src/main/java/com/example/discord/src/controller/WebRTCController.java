@@ -76,7 +76,7 @@ public class WebRTCController {
                           @DestinationVariable(value = "channelId") String channelId,
                           @DestinationVariable(value = "userKey") String userKey){
 
-        log.info("offer : channelId  = {}, sender = {}, userKey = {}, offer = {}", offerReq.getChannelId(), offerReq.getSender(), offerReq.getUserKey(), offerReq.getOffer());
+        log.info("offer : channelId  = {}, sender = {}, userKey = {}", offerReq.getChannelId(), offerReq.getSender(), offerReq.getUserKey());
 
         OfferRes offerRes = OfferRes.builder()
                 .sender(offerReq.getSender())
