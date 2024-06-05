@@ -122,4 +122,26 @@ public class ChannelController {
             return new BaseResponse<>(baseException.getStatus());
         }
     }
+
+    @Operation(summary = "채널 전체 업데이트", description = "채널 전체 업데이트 api")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "요청에 성공했습니다."),
+    })
+    @PutMapping("/{channelId}")
+    public BaseResponse updateChannel(@PathVariable("channelId")
+                                                         @Schema(description="채널 id", example = "a5263a4a-b036-49b1-9dd3-58dcbf3207b8")
+                                                                 UUID channelId) {
+        return new BaseResponse(ApiResponseStatus.SUCCESS);
+    }
+
+    @Operation(summary = "채널 일부 업데이트", description = "채널 일부 업데이트 api")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "요청에 성공했습니다."),
+    })
+    @PatchMapping("/{channelId}")
+    public BaseResponse patchChannel(@PathVariable("channelId")
+                                      @Schema(description="채널 id", example = "a5263a4a-b036-49b1-9dd3-58dcbf3207b8")
+                                              UUID channelId) {
+        return new BaseResponse(ApiResponseStatus.SUCCESS);
+    }
 }
