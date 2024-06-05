@@ -123,25 +123,24 @@ public class ChannelController {
         }
     }
 
-    @Operation(summary = "채널 전체 업데이트", description = "채널 전체 업데이트 api")
+    @Operation(summary = "채널명 업데이트", description = "채널명 업데이트 api")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "요청에 성공했습니다."),
-    })
-    @PutMapping("/{channelId}")
-    public BaseResponse updateChannel(@PathVariable("channelId")
-                                                         @Schema(description="채널 id", example = "a5263a4a-b036-49b1-9dd3-58dcbf3207b8")
-                                                                 UUID channelId) {
-        return new BaseResponse(ApiResponseStatus.SUCCESS);
-    }
-
-    @Operation(summary = "채널 일부 업데이트", description = "채널 일부 업데이트 api")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "요청에 성공했습니다."),
+            @ApiResponse(responseCode = "404", description = "존재하지 않는 채널입니다.", content = @Content(schema = @Schema(implementation = BaseResponse.class), mediaType = "application/json"))
     })
     @PatchMapping("/{channelId}")
-    public BaseResponse patchChannel(@PathVariable("channelId")
-                                      @Schema(description="채널 id", example = "a5263a4a-b036-49b1-9dd3-58dcbf3207b8")
-                                              UUID channelId) {
-        return new BaseResponse(ApiResponseStatus.SUCCESS);
+    public BaseResponse<PostChannelRes> patchChannel(@PathVariable("channelId")
+                                                     @Schema(description="채널 id", example = "a5263a4a-b036-49b1-9dd3-58dcbf3207b8")
+                                                             UUID channelId, @RequestBody PostChannelReq postChannelReq) {
+        try {
+            PostChannelRes postChannelRes =
+                    channelService.updateChannelName(channelId, postChannelReq.getChannelName());
+
+            return new BaseResponse(postChannelRes);
+
+        }catch(BaseException baseException) {
+            return new BaseResponse<>(baseException.getStatus());
+        }
+
     }
 }

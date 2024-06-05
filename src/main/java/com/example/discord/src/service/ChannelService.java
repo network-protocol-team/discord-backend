@@ -65,6 +65,22 @@ public class ChannelService {
         return messageList;
     }
 
+    @Transactional()
+    public PostChannelRes updateChannelName(UUID channelId, String channelName) {
+        validateChannelId(channelId);
+
+        Channel channel = channelRepository.findById(channelId).get();
+        channel.setChannelName(channelName);
+
+        PostChannelRes postChannelRes = PostChannelRes.builder()
+                .channelId(channel.getChannelId())
+                .channelName(channel.getChannelName())
+                .build();
+        log.info("channel name " + channel.getChannelName() + " updated");
+
+        return postChannelRes;
+    }
+
     /* 채널명 중복 체크 */
     @Transactional(readOnly = true)
     public void validateDuplicateChannelName(String channelName) {

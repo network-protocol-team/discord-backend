@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ public class Channel {
     @Column(name = "channel_id", columnDefinition = "BINARY(16)")
     private UUID channelId;
 
+    @Setter
     @Column(name = "name", nullable = false)
     private String channelName;
 
